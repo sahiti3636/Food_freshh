@@ -11,4 +11,6 @@ __pycache__/
 *.dylib
 
 # Uploads
-uploads/
+uploads/myenv/
+*.h5
+*.dylib
