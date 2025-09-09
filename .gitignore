@@ -1,0 +1,12 @@
+# Python envs
+venv/
+myenv/
+__pycache__/
+*.pyc
+
+# Large models
+*.h5
+*.dylib
+
+# Uploads
+uploads/
