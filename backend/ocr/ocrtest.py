@@ -1,10 +1,11 @@
 
 import google.generativeai as genai
 from PIL import Image
+import os
 
 # 1. Configure Gemini with your API key
 # 👉 Replace with your own key from https://ai.google.dev
-genai.configure(api_key="AIzaSyAe8KatitkiF60XEHseZbhTuFJe3lltSiM")
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # 2. Load the image
 image_path = "ocrt.jpg"   # change path if needed

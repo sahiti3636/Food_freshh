@@ -3,9 +3,11 @@ venv/
 myenv/
 __pycache__/
 *.pyc
+.env
 
 # Large models
 *.h5
+*.pt
 *.dylib
 
 # Uploads

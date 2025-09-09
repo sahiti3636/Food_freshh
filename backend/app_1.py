@@ -23,8 +23,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 # --- Configuration ---
 YOLO_CONFIDENCE_THRESHOLD = 0.3
 FRESHNESS_INPUT_SIZE = (150, 150)
-GOOGLE_API_KEY = "AIzaSyAe8KatitkiF60XEHseZbhTuFJe3lltSiM"
-GROQ_API_KEY = "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"
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 YOLO_MODEL_PATH = os.path.join(os.path.dirname(__file__), "freshness detection/yolov8n_trained18.pt")
 FRESHNESS_MODEL_PATH = os.path.join(os.path.dirname(__file__), "freshness3.h5")
 PANTRY_FILE = os.path.join(os.path.dirname(__file__), "pantry.db")  # or pantry.json
