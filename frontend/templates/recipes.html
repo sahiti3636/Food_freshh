@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Recipes - Virtual Pantry{% endblock %}
+
+{% block content %}
+<section class="recipes-section">
+  <div class="recipes-header">
+    <h1 class="page-title">Recipe Suggestions</h1>
+    <p class="page-description">Delicious recipes based on your available ingredients</p>
+  </div>
+
+  <div id="recipes-container" class="recipes-grid">
+    <!-- Recipes will load here dynamically -->
+  </div>
+
+  <div id="empty-state" class="empty-state" style="display: none;">
+    <!-- Removed emoji and replaced with text -->
+    <div class="empty-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+        <path d="M7 2v20"/>
+        <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+      </svg>
+    </div>
+    <h2 class="empty-title">No recipes available</h2>
+    <p class="empty-description">Add some items to your pantry to get personalized recipe suggestions</p>
+    <div class="empty-actions">
+      <a href="{{ url_for('upload') }}" class="btn btn-primary">Add Items</a>
+      <a href="{{ url_for('pantry') }}" class="btn btn-secondary">View Pantry</a>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("recipes-container");
+  const emptyState = document.getElementById("empty-state");
+
+  try {
+    const res = await fetch("/api/recipes");
+    const recipes = await res.json();
+
+    if (!recipes || recipes.length === 0) {
+      emptyState.style.display = "block";
+      return;
+    }
+
+    recipes.forEach(recipe => {
+      const card = document.createElement("div");
+      card.className = "recipe-card";
+
+      card.innerHTML = `
+        <!-- Added recipe image display -->
+        <div class="recipe-image">
+          <img src="${recipe.image_url || '/placeholder.svg?height=200&width=300'}" 
+               alt="${recipe.title}" 
+               loading="lazy"
+               onerror="this.src='/placeholder.svg?height=200&width=300'">
+        </div>
+        
+        <div class="recipe-content">
+          <div class="recipe-header">
+            <h3 class="recipe-title">${recipe.title}</h3>
+            <p class="recipe-description">${recipe.description}</p>
+          </div>
+
+          <div class="recipe-section">
+            <h4 class="recipe-section-title">Ingredients</h4>
+            <ul class="ingredients-list">
+              ${recipe.ingredients.map(ing => `<li class="ingredient-item">${ing}</li>`).join("")}
+            </ul>
+          </div>
+
+          <div class="recipe-section">
+            <h4 class="recipe-section-title">Instructions</h4>
+            <ol class="instructions-list">
+              ${recipe.instructions.map(step => `<li class="instruction-item">${step}</li>`).join("")}
+            </ol>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Failed to load recipes:", err);
+    emptyState.style.display = "block";
+  }
+});
+</script>
+{% endblock %}

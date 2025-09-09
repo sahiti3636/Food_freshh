@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Pantry - Virtual Pantry{% endblock %}
+
+{% block content %}
+<section class="pantry-section">
+  <div class="pantry-header">
+    <h1 class="page-title">Your Virtual Pantry</h1>
+    <a href="{{ url_for('upload') }}" 
+       class="btn btn-primary">
+       ➕ Add Item
+    </a>
+  </div>
+
+  <div id="pantry-container" class="pantry-table-container" style="display: none;">
+    <table class="pantry-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product Name</th>
+          <th>Type</th>
+          <th>Expiry Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="pantry-table-body">
+        </tbody>
+    </table>
+  </div>
+
+  <div id="empty-state" class="empty-state" style="display: none;">
+    <div class="empty-icon">📦</div>
+    <h2 class="empty-title">Your pantry is empty</h2>
+    <p class="empty-description">Start by adding some items to track your food inventory</p>
+    <a href="{{ url_for('upload') }}" 
+       class="btn btn-primary">
+       Add Your First Item
+    </a>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const pantryContainer = document.getElementById("pantry-container");
+  const tableBody = document.getElementById("pantry-table-body");
+  const emptyState = document.getElementById("empty-state");
+
+  try {
+    const res = await fetch("/api/pantry");
+    const items = await res.json();
+
+    if (!items || items.length === 0) {
+      emptyState.style.display = "block";
+      return;
+    }
+
+    pantryContainer.style.display = "block";
+
+    items.forEach((item, index) => {
+      const row = document.createElement("tr");
+      row.className = `pantry-row ${item.is_rotten ? "rotten" : ""}`;
+
+      row.innerHTML = `
+        <td class="serial-number">${index + 1}</td>
+        <td class="product-name">${item.name}</td>
+        <td class="product-type">
+          <span class="type-badge type-${item.type}">
+            ${item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : ""}
+          </span>
+        </td>
+        <td class="expiry-date">
+          ${item.expiry_date ? item.expiry_date : '<span class="no-expiry">No expiry</span>'}
+        </td>
+        <td class="status">
+          ${
+            item.is_rotten
+              ? '<span class="status-badge status-rotten">🚫 Rotten</span>'
+              : '<span class="status-badge status-fresh">✅ Fresh</span>'
+          }
+        </td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+  } catch (err) {
+    console.error("Failed to load pantry items:", err);
+    emptyState.style.display = "block";
+  }
+});
+</script>
+{% endblock %}

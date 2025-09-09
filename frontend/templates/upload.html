@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Add Item - Virtual Pantry{% endblock %}
+
+{% block content %}
+<section class="upload-section">
+  <div class="upload-container">
+    <h1 class="page-title">Add New Item</h1>
+    <p class="page-description">Upload a photo of your grocery item to analyze and add to your pantry</p>
+
+    <form id="upload-form" class="upload-form">
+      <div class="upload-area">
+        <div class="upload-icon">📷</div>
+        <label for="image" class="upload-label">
+          <strong>Choose a photo</strong> or drag and drop
+        </label>
+        <input type="file" id="image" name="image" accept="image/*" required class="upload-input">
+        <p class="upload-hint">PNG, JPG, JPEG up to 10MB</p>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Analyze Image</button>
+    </form>
+
+    <div id="result-card" class="result-card" style="display: none;">
+      <h2 class="result-title">Analysis Results</h2>
+      <div id="result-content" class="result-content"></div>
+      <div class="result-actions">
+        <a href="{{ url_for('pantry') }}" class="btn btn-primary">View Pantry</a>
+        <a href="{{ url_for('upload') }}" class="btn btn-secondary">Add Another Item</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.getElementById("upload-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const fileInput = document.getElementById("image");
+  if (!fileInput.files.length) {
+    alert("Please select an image first.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", fileInput.files[0]);
+
+  try {
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error("Failed to analyze image");
+
+    const result = await res.json();
+    const content = document.getElementById("result-content");
+    const card = document.getElementById("result-card");
+
+    content.innerHTML = `
+      <div class="result-item">
+        <span class="result-label">Detected Type:</span>
+        <span class="result-value">${result.type || "Unknown"}</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Product Name:</span>
+        <span class="result-value">${result.name || "N/A"}</span>
+      </div>
+      ${
+        result.expiry_date
+          ? `<div class="result-item">
+              <span class="result-label">Expiry Date:</span>
+              <span class="result-value">${result.expiry_date}</span>
+            </div>`
+          : ""
+      }
+      ${
+        result.freshness_rating
+          ? `<div class="result-item">
+              <span class="result-label">Freshness:</span>
+              <span class="result-value">${result.freshness_rating}/10</span>
+            </div>`
+          : ""
+      }
+      ${
+        result.warnings && result.warnings.length
+          ? `<div class="result-warnings">${result.warnings
+              .map((w) => `<div class="warning-item">⚠️ ${w}</div>`)
+              .join("")}</div>`
+          : ""
+      }
+      ${
+        result.notices && result.notices.length
+          ? `<div class="result-notices">${result.notices
+              .map((n) => `<div class="notice-item">ℹ️ ${n}</div>`)
+              .join("")}</div>`
+          : ""
+      }
+    `;
+
+    card.style.display = "block";
+  } catch (err) {
+    console.error(err);
+    alert("Error analyzing image. Please try again.");
+  }
+});
+</script>
+{% endblock %}

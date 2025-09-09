@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Virtual Pantry{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Smart Food Management Made Simple</h1>
+        <p class="hero-description">
+            Upload photos of your groceries, track expiry dates, and get personalized recipe suggestions 
+            to reduce food waste and make the most of your pantry.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('upload') }}" class="btn btn-primary">📸 Scan / Add Item</a>
+            <a href="{{ url_for('pantry') }}" class="btn btn-secondary">📦 View Pantry</a>
+            <a href="{{ url_for('recipes') }}" class="btn btn-secondary">🍳 Get Recipes</a>
+        </div>
+    </div>
+</section>
+
+<section class="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps-grid">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Upload & Scan</h3>
+            <p class="step-description">Take a photo of your groceries or packaged foods</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h3 class="step-title">AI Analysis</h3>
+            <p class="step-description">Our AI identifies items, expiry dates, and freshness</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Smart Storage</h3>
+            <p class="step-description">Items are automatically saved to your virtual pantry</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">4</div>
+            <h3 class="step-title">Recipe Ideas</h3>
+            <p class="step-description">Get personalized recipes based on available ingredients</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
