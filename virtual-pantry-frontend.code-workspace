@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "virtual-pantry-frontend",
+			"path": "../../Downloads/virtual-pantry-frontend"
+		},
+		{
+			"name": "food-app",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

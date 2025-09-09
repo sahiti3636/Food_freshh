@@ -1,0 +1,103 @@
+/* Added styles for recipe images */
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(236, 72, 153, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(236, 72, 153, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .recipe-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2);
+  }
+  
+  .recipe-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fce7f3, #f3e8ff);
+  }
+  
+  .recipe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .recipe-card:hover .recipe-image img {
+    transform: scale(1.05);
+  }
+  
+  .recipe-content {
+    padding: 1.5rem;
+    flex: 1;
+  }
+  
+  .recipe-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .recipe-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #be185d;
+    margin-bottom: 0.5rem;
+  }
+  
+  .recipe-description {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .recipe-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .recipe-section:last-child {
+    margin-bottom: 0;
+  }
+  
+  .recipe-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ec4899;
+    margin-bottom: 0.75rem;
+  }
+  
+  .ingredients-list,
+  .instructions-list {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  
+  .ingredient-item,
+  .instruction-item {
+    margin-bottom: 0.5rem;
+    color: #374151;
+    line-height: 1.5;
+  }
+  
+  .recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .recipes-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  
+    .recipe-image {
+      height: 180px;
+    }
+  }
+  
