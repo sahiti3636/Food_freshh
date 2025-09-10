@@ -26,12 +26,13 @@ GOOGLE_CSE_API_KEY = os.getenv("GOOGLE_CSE_API_KEY")
 GOOGLE_CSE_ID = os.getenv("GOOGLE_CSE_ID")  
 
 # Model paths
-YOLO_MODEL_PATH = os.path.join(os.path.dirname(_file_), "freshness_detection/yolov8n_trained18.pt")
-FRESHNESS_MODEL_PATH = os.path.join(os.path.dirname(_file_), "freshness3.h5")
+YOLO_MODEL_PATH = os.path.join(os.path.dirname(__file__), "freshness_detection/yolov8n_trained18.pt")
+FRESHNESS_MODEL_PATH = os.path.join(os.path.dirname(__file__), "freshness3.h5")
 
 # Google Drive model URLs
-YOLO_MODEL_URL = "https://drive.google.com/file/d/1KLwWZuX8kImhOfdUC3MlMZqGyMQUtv4Y/view?usp=sharing"
-FRESHNESS_MODEL_URL = "https://drive.google.com/file/d/1zO0Kv5QepXNfxF033kBfJYmkyGK0zz3e/view?usp=sharing"
+YOLO_MODEL_URL = "https://drive.google.com/uc?export=download&id=1KLwWZuX8kImhOfdUC3MlMZqGyMQUtv4Y"
+FRESHNESS_MODEL_URL = "https://drive.google.com/uc?export=download&id=1zO0Kv5QepXNfxF033kBfJYmkyGK0zz3e"
+
 
 # Flask setup
 app = Flask(
@@ -45,12 +46,12 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # # --- Load Models ---
 # print("Loading models...")
 # yolo_model = YOLO(YOLO_MODEL_PATH, verbose=False)
-# freshness_model = load_model(FRESHNESS_MODEL_PATH, compile=False)
+# # freshness_model = load_model(FRESHNESS_MODEL_PATH, compile=False)
 # --- Helper: Download model if missing ---
 
 def download_model_if_missing(path, url):
-    if not os.path.exists(path):
-        print(f"Model {path} not found. Downloading...")
+    if not os.path.exists(path) or os.path.getsize(path) < 1024:
+        print(f"Model {path} not found or corrupted. Downloading...")
         os.makedirs(os.path.dirname(path), exist_ok=True)
         response = requests.get(url, stream=True)
         response.raise_for_status()
@@ -58,6 +59,7 @@ def download_model_if_missing(path, url):
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
         print("Download complete.")
+
 
 # --- Load Models ---
 print("Loading models...")
