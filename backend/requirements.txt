@@ -2,7 +2,7 @@
 torch==2.1.0
 torchvision==0.16.0
 torchaudio==2.1.0
-tensorflow-macos==2.13.0
+tensorflow==2.13.0
 keras==2.13.1
 typing-extensions==4.5.0
 ultralytics==8.1.30
